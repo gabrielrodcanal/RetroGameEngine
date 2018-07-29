@@ -31,14 +31,35 @@ public class RetroGameEngine {
     public static void main(String[] args) {
         RetroGameEngine engine = new RetroGameEngine(640,480);
         
-        Line line = new Line(200,200,400,200,engine);
-        line.draw();
-        int resolution = 100;
-        for(int i = 0; i <= resolution; i++) {
-            engine.clearScreen();
-            line.rotate(2 * Math.PI * i / resolution);
+        Rectangle rect = new Rectangle(200,200,300,250,engine);
+        rect.draw();
+        engine.updateScreen();
+        /*
+        for(int i = 8; i > 0; i--) {
+            rect.rotate(Math.PI / i);
             engine.updateScreen();
         }
+        */
+        /*
+        rect.rotate(Math.PI);
+        engine.updateScreen(); */
+        int resolution = 50;
+        /*
+        for(int i = 0; i <= 2 * resolution; i++) {
+            engine.clearScreen();
+            rect.rotate(2 * Math.PI * i / resolution);
+            engine.updateScreen();
+            try {
+                Thread.sleep(100);
+            }
+            catch(Exception e) {}
+        }
+        */
+        rect.scale(1.5f);
+        engine.updateScreen();
+        
+        rect.shift(20,100);
+        engine.updateScreen();
     }
     
     public void clearScreen() {

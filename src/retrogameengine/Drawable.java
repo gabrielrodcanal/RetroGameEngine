@@ -16,5 +16,5 @@ public interface Drawable {
     
     public void scale(float times);
     
-    public void shift(float v, float h);
+    public void shift(float h, float v);
 }
