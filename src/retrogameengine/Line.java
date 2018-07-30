@@ -9,7 +9,7 @@ package retrogameengine;
  *
  * @author gabriel
  */
-public class Line implements Drawable {
+public class Line implements Drawable, Cloneable {
     private int x0, y0, x1, y1;
     private int[] gfx;
     private RetroGameEngine engine;
@@ -17,6 +17,7 @@ public class Line implements Drawable {
     private double length;
     private int dx, dy;
     private double theta;
+    private boolean reversed;   //used to know rotation point (was line given reversed?)
     
     public Line(int x0, int y0, int x1, int y1, RetroGameEngine engine) {
         this.x0 = x0;
@@ -29,6 +30,7 @@ public class Line implements Drawable {
         this.scr_height = engine.getScrSize()[1];
         
         dx = x1 - x0;
+        reversed = dx < 0;
         dy = y1 - y0;
         length = (float)Math.sqrt((Math.pow((double)dx,2) + Math.pow((double)dy,2)));
         theta = Math.atan(dy/(double)dx);
@@ -41,7 +43,7 @@ public class Line implements Drawable {
 
         float xInc = dx / (float)steps;
         float yInc = dy / (float)steps;
-
+        
         float x = x0;
         float y = y0;
 
@@ -54,13 +56,19 @@ public class Line implements Drawable {
     
     @Override
     public void rotate(double theta) {
-        x1 = x0 + (int)(length * Math.cos(theta));
-        y1 = y0 + (int)(length * Math.sin(theta));
+        if(reversed) {  //to enable clockwise rotation regardless of inversion
+            x1 = x0 - (int)(length * Math.cos(theta));
+            y1 = y0 - (int)(length * Math.sin(theta));
+        }
+        else {
+            x1 = x0 + (int)(length * Math.cos(theta));
+            y1 = y0 + (int)(length * Math.sin(theta));
+        }
+        
         dx = x1 - x0;
         dy = y1 - y0;
-        this.theta = Math.atan(dy/(double)dx);
+        this.theta = Math.atan2((double)dy, (double)dx);
     }
-    
     
     @Override
     public void scale(float times) {
@@ -100,7 +108,6 @@ public class Line implements Drawable {
         x0 = start[0];
         y1 += start[1] - y0;
         y0 = start[1];
-        draw();
     }
     
     public void setEnd(int[] end) {
@@ -108,6 +115,14 @@ public class Line implements Drawable {
         x1 = end[0];
         y0 += end[1] - y1;
         y1 = end[1];
-        draw();
+    }
+    
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+    
+    public double getTheta() {
+        return theta;
     }
 }
