@@ -39,7 +39,7 @@ public class Screen extends javax.swing.JFrame {
         white = Color.WHITE.getRGB();
         
         trans_colour = new int[] {black,white};
-        screen_buffer = new BufferedImage(scr_width,scr_height,BufferedImage.TYPE_BYTE_BINARY);
+        screen_buffer = new BufferedImage(scr_width,scr_height,BufferedImage.TYPE_INT_RGB);
         screenLabel.setIcon(new ImageIcon(screen_buffer));
         getContentPane().setPreferredSize(new java.awt.Dimension(scr_width, scr_height));
         pack();
@@ -51,10 +51,12 @@ public class Screen extends javax.swing.JFrame {
     }
     
     public void paint_screen() {
+        /*
         for(int i = 0; i < scr_width * scr_height; i++) {
             pixels[i] = trans_colour[gfx[i]];
         }
-        screen_buffer.setRGB(0, 0, scr_width, scr_height, pixels, 0, scr_width);
+        */
+        screen_buffer.setRGB(0, 0, scr_width, scr_height, gfx, 0, scr_width);
         screenLabel.repaint();
     }
     /**

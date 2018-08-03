@@ -5,6 +5,8 @@
  */
 package retrogameengine;
 
+import java.awt.Color;
+
 /**
  *
  * @author gabriel
@@ -13,8 +15,8 @@ public class Circle extends Polygon {
     private final static int DEF_NSIDES = 15;
     
     
-    public Circle(int x0, int y0, double radius, RetroGameEngine engine) {
-        super(DEF_NSIDES, x0, y0, createELength(radius), engine);
+    public Circle(int x0, int y0, double radius, RetroGameEngine engine, Color border_colour) {
+        super(DEF_NSIDES, x0, y0, createELength(radius), engine, border_colour);
     }
     
     private static int createELength(double radius) {

@@ -8,6 +8,7 @@ package retrogameengine;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.awt.Color;
 
 /**
  *
@@ -20,12 +21,12 @@ public class Polygon implements Drawable {
     private RetroGameEngine engine;
     private int[] gfx;
     
-    public Polygon(int n_sides, int x0, int y0, int e_length, RetroGameEngine engine) {
+    public Polygon(int n_sides, int x0, int y0, int e_length, RetroGameEngine engine, Color e_colour) {
         this.n_sides = n_sides;
         theta =  Math.PI - (n_sides - 2) * Math.PI / (n_sides);
         this.engine = engine;
         edges = new Line[n_sides];
-        edges[0] = new Line(x0, y0, x0 + e_length, y0, engine);
+        edges[0] = new Line(x0, y0, x0 + e_length, y0, engine,e_colour);
         double angle = theta;
         gfx = engine.getGfx();
         for(int i = 1; i < n_sides; i++) {
@@ -71,7 +72,12 @@ public class Polygon implements Drawable {
         }
     }
     
-    public void fill() {
+    /**
+     * Fills the inner polygon space with the chosen colour. This method should be applied before draw to avoid
+     * undesired overlapping.
+     * @param colour 
+     */
+    public void fill(int colour) {
         List<int[]> pixels = edges[0].getPixels();
         
         for(int i = 1; i < n_sides; i++)
@@ -95,7 +101,7 @@ public class Polygon implements Drawable {
                 x1 = Collections.max(group);
                 
                 for(int j = x0; j < x1; j++)
-                    gfx[j + y] = 1;
+                    gfx[j + y] = colour;
                 
                 group.clear();
                 y = elem[1];

@@ -5,7 +5,7 @@
  */
 package retrogameengine;
 
-import java.util.ArrayList;
+import java.awt.Color;
 
 /**
  *
@@ -33,11 +33,12 @@ public class RetroGameEngine {
     public static void main(String[] args) {
         RetroGameEngine engine = new RetroGameEngine(640,480);
         
-        Polygon p = new Polygon(7,50,50,60,engine);
-        p.draw();
+        Circle c = new Circle(250,250,10,engine,Color.MAGENTA);
+        //Polygon p = new Polygon(7,50,50,60,engine,Color.CYAN);
+        
+        c.fill(Color.GREEN.getRGB());
+        c.draw();
         engine.updateScreen();        
-        p.fill();
-        engine.updateScreen();
     }
     
     public void clearScreen() {

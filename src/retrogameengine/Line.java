@@ -6,6 +6,7 @@
 package retrogameengine;
 
 import java.util.ArrayList;
+import java.awt.Color;
 
 /**
  *
@@ -20,8 +21,9 @@ public class Line implements Drawable, Cloneable {
     private int dx, dy;
     private double theta;
     private boolean reversed;   //used to know rotation point (was line given reversed?)
+    private int colour;
     
-    public Line(int x0, int y0, int x1, int y1, RetroGameEngine engine) {
+    public Line(int x0, int y0, int x1, int y1, RetroGameEngine engine, Color colour) {
         this.x0 = x0;
         this.y0 = y0;
         this.x1 = x1;
@@ -30,6 +32,7 @@ public class Line implements Drawable, Cloneable {
         gfx = engine.getGfx();
         this.scr_width = engine.getScrSize()[0];
         this.scr_height = engine.getScrSize()[1];
+        this.colour = colour.getRGB();
         
         dx = x1 - x0;
         reversed = dx < 0;
@@ -50,7 +53,7 @@ public class Line implements Drawable, Cloneable {
         float y = y0;
 
         for(int i = 0; i < steps; i++) {
-            gfx[Math.round(x) + Math.round(y) * scr_width] = 1;
+            gfx[Math.round(x) + Math.round(y) * scr_width] = colour;
             x += xInc;
             y += yInc;
         }
