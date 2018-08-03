@@ -5,6 +5,8 @@
  */
 package retrogameengine;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author gabriel
@@ -124,5 +126,25 @@ public class Line implements Drawable, Cloneable {
     
     public double getTheta() {
         return theta;
+    }
+    
+    public ArrayList<int[]> getPixels() {
+        int steps = Math.abs(dy) > Math.abs(dx) ? Math.abs(dy) : Math.abs(dx);
+        
+        ArrayList<int[]> pixels = new ArrayList<int[]>();
+
+        float xInc = dx / (float)steps;
+        float yInc = dy / (float)steps;
+        
+        float x = x0;
+        float y = y0;
+
+        for(int i = 0; i < steps; i++) {
+            pixels.add(new int[] {Math.round(x), Math.round(y) * scr_width});
+            x += xInc;
+            y += yInc;
+        }
+        
+        return pixels;
     }
 }

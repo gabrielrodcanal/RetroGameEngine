@@ -5,6 +5,10 @@
  */
 package retrogameengine;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  *
  * @author gabriel
@@ -14,6 +18,7 @@ public class Polygon implements Drawable {
     private double theta;
     private Line[] edges;
     private RetroGameEngine engine;
+    private int[] gfx;
     
     public Polygon(int n_sides, int x0, int y0, int e_length, RetroGameEngine engine) {
         this.n_sides = n_sides;
@@ -22,6 +27,7 @@ public class Polygon implements Drawable {
         edges = new Line[n_sides];
         edges[0] = new Line(x0, y0, x0 + e_length, y0, engine);
         double angle = theta;
+        gfx = engine.getGfx();
         for(int i = 1; i < n_sides; i++) {
             try {
                 edges[i] = (Line)edges[i-1].clone();
@@ -64,5 +70,38 @@ public class Polygon implements Drawable {
             edges[i].setStart(edges[i-1].getEnd());
         }
     }
-      
+    
+    public void fill() {
+        List<int[]> pixels = edges[0].getPixels();
+        
+        for(int i = 1; i < n_sides; i++)
+            pixels.addAll(edges[i].getPixels());
+        
+        pixels.sort((int[] p0, int[] p1) -> Integer.compare(p0[1],p1[1]));
+        
+        int x0, x1, y;
+        int[] elem;
+        
+        //x coordinates grouped by y coordinate
+        ArrayList<Integer> group = new ArrayList<Integer>();
+        group.add(pixels.get(0)[0]);
+        y = pixels.get(0)[1];
+        
+        for(int i = 1; i < pixels.size(); i++) {
+            elem = pixels.get(i);
+            
+            if(elem[1] != pixels.get(i-1)[1]) {
+                x0 = Collections.min(group);
+                x1 = Collections.max(group);
+                
+                for(int j = x0; j < x1; j++)
+                    gfx[j + y] = 1;
+                
+                group.clear();
+                y = elem[1];
+            }
+            
+            group.add(elem[0]);
+        }
+    }
 }

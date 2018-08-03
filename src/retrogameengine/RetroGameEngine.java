@@ -5,6 +5,8 @@
  */
 package retrogameengine;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author gabriel
@@ -31,11 +33,11 @@ public class RetroGameEngine {
     public static void main(String[] args) {
         RetroGameEngine engine = new RetroGameEngine(640,480);
         
-        Circle c = new Circle(250,250,20,engine);
-        c.draw();
-        //Polygon p = new Polygon(15,250,250,10,engine);
-        //p.draw();
+        Polygon p = new Polygon(7,50,50,60,engine);
+        p.draw();
         engine.updateScreen();        
+        p.fill();
+        engine.updateScreen();
     }
     
     public void clearScreen() {
