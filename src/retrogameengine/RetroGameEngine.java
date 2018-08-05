@@ -36,39 +36,10 @@ public class RetroGameEngine {
         Circle c = new Circle(100,200,2,engine,Color.MAGENTA);
         Polygon block = new Polygon(4,200,200,60,engine,Color.CYAN);
         
-        /*
-        //Rotation test
-        for(int i = 0; i <= 50; i++) {
-            engine.clearScreen();
-            block.rotate(2 * i * Math.PI / 50);
-            block.fill(Color.blue);
-            block.draw();
-            engine.updateScreen();
-            try {
-                Thread.sleep(100);
-            }
-            catch(Exception e) {}
-        }
-        */
-        
-        //Collision test
-        int sign = 1;
-        for(int i = 0; i < 50; i++) {
-            engine.clearScreen();
-            c.fill(Color.GREEN);
-            c.draw();
-            block.fill(Color.ORANGE);
-            block.draw();
-            engine.updateScreen();
-            if(c.hasCollided(block))
-                sign = -1;
-            c.shift(sign * 4, 0);
-            
-            try {
-                Thread.sleep(16);
-            }
-            catch(Exception e) {}
-        }
+        block.scale(0,1);
+        block.fill(Color.blue);
+        block.draw();
+        engine.updateScreen();
     }
     
     public void clearScreen() {

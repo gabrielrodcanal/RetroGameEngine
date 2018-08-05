@@ -16,7 +16,7 @@ public interface Drawable {
     
     public void rotate(double theta);
     
-    public void scale(float times);
+    public void scale(float timesX, float timesY);
     
     public void shift(float h, float v);
     

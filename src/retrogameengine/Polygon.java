@@ -65,10 +65,10 @@ public class Polygon implements Drawable {
     }
 
     @Override
-    public void scale(float times) {
-        edges[0].scale(times);
+    public void scale(float timesX, float timesY) {
+        edges[0].scale(timesX,timesY);
         for(int i = 1; i < n_sides; i++) {
-            edges[i].scale(times);
+            edges[i].scale(timesX,timesY);
             edges[i].setStart(edges[i-1].getEnd());
         }
         getPixels();

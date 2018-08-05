@@ -86,14 +86,16 @@ public class Line implements Drawable, Cloneable {
     }
     
     @Override
-    public void scale(float times) {
-        double s_length = times * length;
-        int sign = s_length < length ? 1 : -1;
+    public void scale(float timesX, float timesY) {
+        double sX_length = timesX * length;
+        double sY_length = timesY * length;
+        int signX = sX_length < length ? 1 : -1;
+        int signY = sY_length < length ? 1 : -1;
         
-        x0 += sign*(s_length/2) * Math.cos(theta);
-        y0 += sign*(s_length/2) * Math.sin(theta);
-        x1 -= sign*(s_length/2) * Math.cos(theta);
-        y1 -= sign*(s_length/2) * Math.sin(theta);
+        x0 += signX*(sX_length/2) * Math.cos(theta);
+        y0 += signY*(sY_length/2) * Math.sin(theta);
+        x1 -= signX*(sX_length/2) * Math.cos(theta);
+        y1 -= signY*(sY_length/2) * Math.sin(theta);
         dx = x1 - x0;
         dy = y1 - y0;
     }
