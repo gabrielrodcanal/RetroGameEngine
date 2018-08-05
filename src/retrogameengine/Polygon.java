@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.awt.Color;
+import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  *
@@ -20,6 +22,7 @@ public class Polygon implements Drawable {
     private Line[] edges;
     private RetroGameEngine engine;
     private int[] gfx;
+    private HashSet<Integer> poly_pixels;
     
     public Polygon(int n_sides, int x0, int y0, int e_length, RetroGameEngine engine, Color e_colour) {
         this.n_sides = n_sides;
@@ -29,15 +32,18 @@ public class Polygon implements Drawable {
         edges[0] = new Line(x0, y0, x0 + e_length, y0, engine,e_colour);
         double angle = theta;
         gfx = engine.getGfx();
+        poly_pixels = new HashSet<Integer>();
         for(int i = 1; i < n_sides; i++) {
             try {
                 edges[i] = (Line)edges[i-1].clone();
                 edges[i].setStart(edges[i-1].getEnd());
                 edges[i].rotate(angle);
+                edges[i].setInitialTheta();
                 angle += theta;
             }
             catch(CloneNotSupportedException e) {}
         }
+        getPixels();
     }
 
     @Override
@@ -48,11 +54,14 @@ public class Polygon implements Drawable {
 
     @Override
     public void rotate(double alpha) {
-        edges[0].rotate(alpha);
+        
+        //System.out.println("Theta: " + edges[0].getInitialTheta() + " alpha: " + alpha);
+        edges[0].rotate(edges[0].getInitialTheta() + alpha);
         for(int i = 1; i < n_sides; i++) {
             edges[i].setStart(edges[i-1].getEnd());
-            edges[i].rotate(edges[i].getTheta() + alpha);
+            edges[i].rotate(edges[i].getInitialTheta() + alpha);
         }
+        getPixels();
     }
 
     @Override
@@ -62,6 +71,7 @@ public class Polygon implements Drawable {
             edges[i].scale(times);
             edges[i].setStart(edges[i-1].getEnd());
         }
+        getPixels();
     }
 
     @Override
@@ -70,18 +80,16 @@ public class Polygon implements Drawable {
         for(int i = 1; i < n_sides; i++) {
             edges[i].setStart(edges[i-1].getEnd());
         }
-    }
+        getPixels();
+    }    
     
-    /**
-     * Fills the inner polygon space with the chosen colour. This method should be applied before draw to avoid
-     * undesired overlapping.
-     * @param colour 
-     */
-    public void fill(int colour) {
-        List<int[]> pixels = edges[0].getPixels();
+    @Override
+    public HashSet<Integer> getPixels() {
+        poly_pixels.clear();
+        List<int[]> pixels = edges[0].getPixelsXY();
         
         for(int i = 1; i < n_sides; i++)
-            pixels.addAll(edges[i].getPixels());
+            pixels.addAll(edges[i].getPixelsXY());
         
         pixels.sort((int[] p0, int[] p1) -> Integer.compare(p0[1],p1[1]));
         
@@ -101,7 +109,7 @@ public class Polygon implements Drawable {
                 x1 = Collections.max(group);
                 
                 for(int j = x0; j < x1; j++)
-                    gfx[j + y] = colour;
+                    poly_pixels.add(j + y);
                 
                 group.clear();
                 y = elem[1];
@@ -109,5 +117,28 @@ public class Polygon implements Drawable {
             
             group.add(elem[0]);
         }
+        
+        return poly_pixels;
+    }
+    
+    /**
+     * Fills the inner polygon space with the chosen colour. This method should be applied before draw to avoid
+     * undesired overlapping.
+     * @param colour 
+     */    
+    public void fill(Color colour) {
+        int int_colour = colour.getRGB();
+        Iterator<Integer> it = poly_pixels.iterator();
+        while(it.hasNext())
+            gfx[it.next()] = int_colour;
+    }
+    
+    public boolean hasCollided(Drawable other) {
+        Iterator<Integer> other_it = other.getPixels().iterator();
+        while(other_it.hasNext())
+            if(poly_pixels.contains(other_it.next()))
+                return true;
+        
+        return false;
     }
 }

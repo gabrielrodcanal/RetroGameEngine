@@ -7,6 +7,8 @@ package retrogameengine;
 
 import java.util.ArrayList;
 import java.awt.Color;
+import java.util.HashSet;
+import java.util.function.Consumer;
 
 /**
  *
@@ -14,6 +16,7 @@ import java.awt.Color;
  */
 public class Line implements Drawable, Cloneable {
     private int x0, y0, x1, y1;
+    private int orig_x0, orig_y0, orig_x1, orig_y1;
     private int[] gfx;
     private RetroGameEngine engine;
     private int scr_width, scr_height;
@@ -22,12 +25,18 @@ public class Line implements Drawable, Cloneable {
     private double theta;
     private boolean reversed;   //used to know rotation point (was line given reversed?)
     private int colour;
+    private HashSet<Integer> pixels;
+    private double initial_theta;
     
     public Line(int x0, int y0, int x1, int y1, RetroGameEngine engine, Color colour) {
         this.x0 = x0;
         this.y0 = y0;
         this.x1 = x1;
         this.y1 = y1;
+        this.orig_x0 = x0;
+        this.orig_x1 = x1;
+        this.orig_y0 = y0;
+        this.orig_y1 = y1;
         this.engine = engine;
         gfx = engine.getGfx();
         this.scr_width = engine.getScrSize()[0];
@@ -39,6 +48,7 @@ public class Line implements Drawable, Cloneable {
         dy = y1 - y0;
         length = (float)Math.sqrt((Math.pow((double)dx,2) + Math.pow((double)dy,2)));
         theta = Math.atan(dy/(double)dx);
+        initial_theta = theta;
         
     }
     
@@ -126,12 +136,43 @@ public class Line implements Drawable, Cloneable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
+    @Override
+    public HashSet<Integer> getPixels() {
+        getPixelsXY().forEach(new Consumer<int[]>() {
+            @Override
+            public void accept(int[] T) {
+                pixels.add(T[0] + T[1]);
+            }
+        });
+        
+        return pixels;
+    }
     
+    /**
+     * Returns the current angle of the line.
+     * @return current angle of the line.
+     */
     public double getTheta() {
         return theta;
     }
     
-    public ArrayList<int[]> getPixels() {
+    /**
+     * Returns the initial angle (the angle the line had when the polygon was constructed). It is used for rotations.
+     * @return initial angle of the line when the polygon was constructed.
+     */
+    public double getInitialTheta() {
+        return initial_theta;
+    }
+    
+    /**
+     * Should be used to fix the proper angle for the polygon when it is constructed.
+     */
+    public void setInitialTheta() {
+        initial_theta = theta;
+    }
+    
+    public ArrayList<int[]> getPixelsXY() {
         int steps = Math.abs(dy) > Math.abs(dx) ? Math.abs(dy) : Math.abs(dx);
         
         ArrayList<int[]> pixels = new ArrayList<int[]>();

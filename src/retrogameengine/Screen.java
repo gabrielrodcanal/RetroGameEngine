@@ -19,7 +19,6 @@ public class Screen extends javax.swing.JFrame {
     private int black;
     private int white;
     private int[] gfx;
-    private int[] pixels;
     
     private int[] trans_colour;
     private int scr_width, scr_height;
@@ -33,7 +32,6 @@ public class Screen extends javax.swing.JFrame {
         this.scr_width = scr_width;
         this.scr_height = scr_height;
         this.gfx = gfx;
-        pixels = new int[scr_width * scr_height];
         
         black = Color.BLACK.getRGB();
         white = Color.WHITE.getRGB();
@@ -51,11 +49,6 @@ public class Screen extends javax.swing.JFrame {
     }
     
     public void paint_screen() {
-        /*
-        for(int i = 0; i < scr_width * scr_height; i++) {
-            pixels[i] = trans_colour[gfx[i]];
-        }
-        */
         screen_buffer.setRGB(0, 0, scr_width, scr_height, gfx, 0, scr_width);
         screenLabel.repaint();
     }

@@ -5,6 +5,8 @@
  */
 package retrogameengine;
 
+import java.util.HashSet;
+
 /**
  *
  * @author gabriel
@@ -17,4 +19,6 @@ public interface Drawable {
     public void scale(float times);
     
     public void shift(float h, float v);
+    
+    public HashSet<Integer> getPixels();
 }
