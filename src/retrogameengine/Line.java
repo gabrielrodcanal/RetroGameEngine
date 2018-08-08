@@ -49,7 +49,7 @@ public class Line implements Drawable, Cloneable {
         length = (float)Math.sqrt((Math.pow((double)dx,2) + Math.pow((double)dy,2)));
         theta = Math.atan(dy/(double)dx);
         initial_theta = theta;
-        
+        pixels = new HashSet<Integer>();
     }
     
     @Override
@@ -175,9 +175,10 @@ public class Line implements Drawable, Cloneable {
     }
     
     public ArrayList<int[]> getPixelsXY() {
+        pixels.clear();
         int steps = Math.abs(dy) > Math.abs(dx) ? Math.abs(dy) : Math.abs(dx);
         
-        ArrayList<int[]> pixels = new ArrayList<int[]>();
+        ArrayList<int[]> pixels_arr = new ArrayList<int[]>();
 
         float xInc = dx / (float)steps;
         float yInc = dy / (float)steps;
@@ -186,11 +187,11 @@ public class Line implements Drawable, Cloneable {
         float y = y0;
 
         for(int i = 0; i < steps; i++) {
-            pixels.add(new int[] {Math.round(x), Math.round(y) * scr_width});
+            pixels_arr.add(new int[] {Math.round(x), Math.round(y) * scr_width});
             x += xInc;
             y += yInc;
         }
         
-        return pixels;
+        return pixels_arr;
     }
 }

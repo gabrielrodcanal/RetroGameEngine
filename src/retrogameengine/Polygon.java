@@ -32,7 +32,7 @@ public class Polygon implements Drawable {
         edges[0] = new Line(x0, y0, x0 + e_length, y0, engine,e_colour);
         double angle = theta;
         gfx = engine.getGfx();
-        poly_pixels = new HashSet<Integer>();
+        poly_pixels = new HashSet<Integer>();        
         for(int i = 1; i < n_sides; i++) {
             try {
                 edges[i] = (Line)edges[i-1].clone();
@@ -134,11 +134,21 @@ public class Polygon implements Drawable {
     }
     
     public boolean hasCollided(Drawable other) {
-        Iterator<Integer> other_it = other.getPixels().iterator();
-        while(other_it.hasNext())
-            if(poly_pixels.contains(other_it.next()))
-                return true;
+        if(other != null) {
+            Iterator<Integer> other_it = other.getPixels().iterator();
+            while(other_it.hasNext())
+                if(poly_pixels.contains(other_it.next()))
+                    return true;
+        }
         
         return false;
+    }
+    
+    public RetroGameEngine getEngine() {
+        return engine;
+    }
+    
+    public Line getEdge(int n) {
+        return edges[n];
     }
 }

@@ -16,18 +16,23 @@ public class RetroGameEngine {
     private int scr_height;
     public int[] gfx;
     private Screen screen;
-
-    public RetroGameEngine(int scr_width, int scr_height) {
+    
+    public RetroGameEngine(int scr_width, int scr_height, Screen screen) {
         this.scr_width = scr_width;
         this.scr_height = scr_height;
         gfx = new int[scr_width * scr_height];
-        screen = new Screen(scr_width, scr_height, gfx);
+        this.screen = screen;
+        this.screen.setGfx(gfx);
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 screen.setVisible(true);
             }
         });
+    }
+    
+    public RetroGameEngine(int scr_width, int scr_height) {        
+        this(scr_width, scr_height, new Screen(scr_width, scr_height));
     }
     
     public static void main(String[] args) {
@@ -57,5 +62,9 @@ public class RetroGameEngine {
     
     public int[] getScrSize() {
         return new int[] {scr_width, scr_height};
+    }
+    
+    public Screen getScreen() {
+        return screen;
     }
 }

@@ -26,12 +26,11 @@ public class Screen extends javax.swing.JFrame {
     /**
      * Creates new form ScreenFrame
      */
-    public Screen(int scr_width, int scr_height, int[] gfx) {   
+    public Screen(int scr_width, int scr_height) {
         initComponents();
         
         this.scr_width = scr_width;
         this.scr_height = scr_height;
-        this.gfx = gfx;
         
         black = Color.BLACK.getRGB();
         white = Color.WHITE.getRGB();
@@ -42,6 +41,11 @@ public class Screen extends javax.swing.JFrame {
         getContentPane().setPreferredSize(new java.awt.Dimension(scr_width, scr_height));
         pack();
         this.setResizable(false);
+    }
+    
+    public Screen(int scr_width, int scr_height, int[] gfx) {   
+        this(scr_width, scr_height);
+        this.gfx = gfx;
     }
     
     public void setGfx(int[] gfx) {
